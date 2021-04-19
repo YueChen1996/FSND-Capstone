@@ -9,6 +9,9 @@ from urllib.request import urlopen
 AUTH0_DOMAIN = os.environ['AUTH0_DOMAIN']
 ALGORITHMS = os.environ['ALGORITHMS']
 API_AUDIENCE = os.environ['API_AUDIENCE']
+AUTH0_CLIENT_ID=os.environ['AUTH0_CLIENT_ID']
+AUTH0_CALLBACK_URL=os.environ['AUTH0_CALLBACK_URL']
+
 
 # AuthError Exception
 '''

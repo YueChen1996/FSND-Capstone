@@ -3,7 +3,7 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, Movie, Actor
-from auth import AuthError, requires_auth, get_token_auth_header
+from auth import *
 
 def create_app(test_config=None):
   # create and configure the app
@@ -26,7 +26,7 @@ def create_app(test_config=None):
 
   @app.route('/movies', methods=['GET'])
   @requires_auth('get:movies')
-  def get_movies():
+  def get_movies(payload):
     try:
         movies = Movie.query.all()
 
@@ -41,7 +41,7 @@ def create_app(test_config=None):
   
   @app.route('/actors', methods=['GET'])
   @requires_auth('get:actors')
-  def get_actors():
+  def get_actors(payload):
     try:
         actors = Actor.query.all()
 
@@ -55,7 +55,7 @@ def create_app(test_config=None):
 
   @app.route('/movies', methods=['POST'])
   @requires_auth('post:movies')
-  def post_movies():
+  def post_movies(payload):
     body = request.get_json()
 
     if not ('title' in body and 'release_date' in body):
@@ -78,7 +78,7 @@ def create_app(test_config=None):
 
   @app.route('/actors', methods=['POST'])
   @requires_auth('post:actors')
-  def post_actors():
+  def post_actors(payload):
     body = request.get_json()
 
     if not ('name' in body and 'age' in body and 'gender' in body):
@@ -102,7 +102,7 @@ def create_app(test_config=None):
 
   @app.route('/movies/<int:movie_id>', methods=['DELETE'])
   @requires_auth('delete:movies')
-  def delete_movies(movie_id):
+  def delete_movies(payload, movie_id):
     movie = Movie.query.get(movie_id)
 
     if movie:
@@ -122,7 +122,7 @@ def create_app(test_config=None):
 
   @app.route('/actors/<int:actor_id>', methods=['DELETE'])
   @requires_auth('delete:actors')
-  def delete_actors(actor_id):
+  def delete_actors(payload, actor_id):
     actor = Actor.query.get(actor_id)
 
     if actor:
@@ -140,7 +140,7 @@ def create_app(test_config=None):
 
   @app.route('/movies/<int:movie_id>', methods=['PATCH'])
   @requires_auth('patch:movies')
-  def patch_movie_id(movie_id):
+  def patch_movie_id(payload, movie_id):
     movie = Movie.query.get(movie_id)
 
     if movie:
@@ -168,7 +168,7 @@ def create_app(test_config=None):
 
   @app.route('/actors/<int:actor_id>', methods=['PATCH'])
   @requires_auth('patch:actors')
-  def patch_actor_id(actor_id):
+  def patch_actor_id(payload, actor_id):
     actor = Actor.query.get(actor_id)
 
     if actor:
