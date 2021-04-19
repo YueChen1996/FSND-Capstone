@@ -5,6 +5,10 @@ from flask_cors import CORS
 from models import setup_db, Movie, Actor
 from auth import *
 
+AUTH0_CLIENT_ID='5e7cwIearaq8XicDHM9yEpfGDVjZJR7r'
+AUTH0_CALLBACK_URL='https：//yuechen1996.herokuapp.com'
+#AUTH0_CALLBACK_URL='https://0.0.0.0:8080'
+
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
@@ -24,6 +28,17 @@ def create_app(test_config=None):
       'description':'Welcome to Casting Agency!'
     })
 
+  @app.route('/auth', methods=['GET'])
+  def get_auth():
+    auth_url = f'http://{AUTH0_DOMAIN}/authorize' \
+               f'?audience={API_AUDIENCE}' \
+               f'&response_type=token&client_id=' \
+               f'{AUTH0_CLIENT_ID}&redirect_uri=' \
+               f'{AUTH0_CALLBACK_URL}'
+    return jsonify({
+      'url': auth_url
+    })
+              
   @app.route('/movies', methods=['GET'])
   @requires_auth('get:movies')
   def get_movies(payload):
