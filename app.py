@@ -6,7 +6,7 @@ from models import setup_db, Movie, Actor
 from auth import *
 
 AUTH0_CLIENT_ID='5e7cwIearaq8XicDHM9yEpfGDVjZJR7r'
-AUTH0_CALLBACK_URL='https：//yuechen1996.herokuapp.com'
+AUTH0_CALLBACK_URL='https://yuechen1996.herokuapp.com'
 #AUTH0_CALLBACK_URL='https://0.0.0.0:8080'
 
 def create_app(test_config=None):
@@ -42,30 +42,28 @@ def create_app(test_config=None):
   @app.route('/movies', methods=['GET'])
   @requires_auth('get:movies')
   def get_movies(payload):
-    try:
-        movies = Movie.query.all()
+    movies = Movie.query.all()
 
-        return jsonify({
-            'success': True,
-            'movies': [movie.format() for movie in movies]
-    })
-    except:
+    if len(movies) == 0:
         abort(404)
-    
 
+    return jsonify({
+        'success': True,
+        'movies': [movie.format() for movie in movies]
+    })
   
   @app.route('/actors', methods=['GET'])
   @requires_auth('get:actors')
   def get_actors(payload):
-    try:
-        actors = Actor.query.all()
+    actors = Actor.query.all()
 
-        return jsonify({
-            'success': True,
-            'actors': [actor.format() for actor in movies]
-    })
-    except:
+    if len(actors) == 0:
         abort(404)
+          
+    return jsonify({
+        'success': True,
+        'actors': [actor.format() for actor in actors]
+    })
 
 
   @app.route('/movies', methods=['POST'])
@@ -85,7 +83,7 @@ def create_app(test_config=None):
         
         return jsonify({
             'success': True,
-            'movie': movie.format
+            'movie': movie.format()
         })
     except:
         abort(422)
@@ -109,7 +107,7 @@ def create_app(test_config=None):
         
         return jsonify({
             'success': True,
-            'actor': actor.format
+            'actor': actor.format()
         })
     except:
         abort(422)
@@ -126,7 +124,7 @@ def create_app(test_config=None):
 
             return jsonify({
                 "success": True,
-                "movie": movie_id
+                "movie id": movie_id
             })
         except:
             abort(422)
@@ -146,7 +144,7 @@ def create_app(test_config=None):
 
             return jsonify({
                 "success": True,
-                "actor": actor_id
+                "actor id": actor_id
             })
         except:
             abort(422)
